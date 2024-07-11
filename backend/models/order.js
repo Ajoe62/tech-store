@@ -1,11 +1,10 @@
-module.exports = (sequelize, DataTypes) => {
-  const Order = sequelize.define('Order', {
-    totalAmount: { type: DataTypes.FLOAT, allowNull: false },
-    status: {
-      type: DataTypes.ENUM('pending', 'shipped', 'delivered'),
-      defaultValue: 'pending',
+const { DataTypes } = require('sequelize');
+
+module.exports = (sequelize) => {
+  return sequelize.define('Order', {
+    totalAmount: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
     },
   });
-
-  return Order;
 };

@@ -1,26 +1,19 @@
-const Sequelize = require('sequelize');
 const sequelize = require('../config/database');
+const { DataTypes } = require('sequelize');
 
-const User = require('./user')(sequelize, Sequelize);
-const Product = require('./product')(sequelize, Sequelize);
-const Category = require('./category')(sequelize, Sequelize);
-const Order = require('./order')(sequelize, Sequelize);
+const User = require('./user')(sequelize, DataTypes);
+const Product = require('./product')(sequelize, DataTypes);
+const Category = require('./category')(sequelize, DataTypes);
+const Order = require('./order')(sequelize, DataTypes);
 
-User.hasMany(Order);
-Order.belongsTo(User);
+// Define associations
+User.hasMany(Order, { foreignKey: 'userId' });
+Order.belongsTo(User, { foreignKey: 'userId' });
 
-Category.hasMany(Product);
-Product.belongsTo(Category);
+Product.belongsTo(Category, { foreignKey: 'categoryId' });
+Category.hasMany(Product, { foreignKey: 'categoryId' });
 
 Order.belongsToMany(Product, { through: 'OrderProducts' });
 Product.belongsToMany(Order, { through: 'OrderProducts' });
 
-sequelize.sync();
-
-module.exports = {
-  User,
-  Product,
-  Category,
-  Order,
-  sequelize,
-};
+module.exports = { sequelize, User, Product, Category, Order };
