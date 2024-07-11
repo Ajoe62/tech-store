@@ -12,7 +12,7 @@ exports.register = async (req, res) => {
       email,
       password: hashedPassword,
       address,
-      role: role || 'user', // default to 'user' if role is not provided
+      role: role || 'user',
     });
 
     const token = generateToken(user);
@@ -49,8 +49,15 @@ exports.login = async (req, res) => {
 
 exports.getProfile = async (req, res) => {
   try {
-    const user = await User.findByPk(req.user.id);
-    res.json(user);
+    const user = await User.findByPk(req.user.id, {
+      attributes: { exclude: ['password'] },
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.status(200).json(user);
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
   }
