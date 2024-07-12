@@ -29,7 +29,7 @@ exports.createCategory = async (req, res) => {
 
   if (!name || !description)
     return res.status(400).json({ error: 'Name and description are required' });
-  if (await category.findOne({ where: { name } }))
+  if (await Category.findOne({ where: { name } }))
     return res.status(400).json({ error: 'Category already exists' });
 
   try {
@@ -44,7 +44,7 @@ exports.updateCategory = async (req, res) => {
   const { name, description } = req.body;
   if (!name || !description)
     return res.status(400).json({ error: 'Name and description are required' });
-  if (await category.findOne({ where: { name } }))
+  if (await Category.findOne({ where: { name } }))
     return res.status(400).json({ error: 'Category already exists' });
   try {
     const category = await Category.findByPk(req.params.id);
