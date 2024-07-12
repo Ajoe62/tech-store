@@ -1,8 +1,8 @@
-const { Product } = require('../models');
+const { Product, Category } = require('../models');
 
 exports.getAllProducts = async (req, res) => {
   try {
-    const products = await Product.findAll();
+    const products = await Product.findAll({ include: [{ model: Category }] });
     res.status(200).json(products);
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
@@ -11,7 +11,9 @@ exports.getAllProducts = async (req, res) => {
 
 exports.getProductById = async (req, res) => {
   try {
-    const product = await Product.findByPk(req.params.id);
+    const product = await Product.findByPk(req.params.id, {
+      include: [{ model: Category }],
+    });
 
     if (!product) {
       return res.status(404).json({ error: 'Product not found' });
@@ -24,8 +26,19 @@ exports.getProductById = async (req, res) => {
 };
 
 exports.createProduct = async (req, res) => {
+  const { name, description, price, stockQuantity, categoryId, imageUrl } =
+    req.body;
+
   try {
-    const product = await Product.create(req.body);
+    const product = await Product.create({
+      name,
+      description,
+      price,
+      stockQuantity,
+      categoryId,
+      imageUrl,
+    });
+
     res.status(201).json(product);
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
@@ -33,6 +46,9 @@ exports.createProduct = async (req, res) => {
 };
 
 exports.updateProduct = async (req, res) => {
+  const { name, description, price, stockQuantity, categoryId, imageUrl } =
+    req.body;
+
   try {
     const product = await Product.findByPk(req.params.id);
 
@@ -40,10 +56,18 @@ exports.updateProduct = async (req, res) => {
       return res.status(404).json({ error: 'Product not found' });
     }
 
-    await product.update(req.body);
+    product.name = name;
+    product.description = description;
+    product.price = price;
+    product.stockQuantity = stockQuantity;
+    product.categoryId = categoryId;
+    product.imageUrl = imageUrl;
+
+    await product.save();
+
     res.status(200).json(product);
   } catch (error) {
-    res.status(500).json({ error: 'Server error' });
+    res.status500().json({ error: 'Server error' });
   }
 };
 
@@ -56,7 +80,8 @@ exports.deleteProduct = async (req, res) => {
     }
 
     await product.destroy();
-    res.status(204).end();
+
+    res.status(204).json();
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
   }

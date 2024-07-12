@@ -19,11 +19,7 @@ exports.createOrder = async (req, res) => {
 
 exports.getUserOrders = async (req, res) => {
   try {
-    const orders = await Order.findAll({
-      where: { userId: req.user.id },
-      include: Product,
-    });
-
+    const orders = await Order.findAll({ where: { userId: req.user.id } });
     res.status(200).json(orders);
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
@@ -33,10 +29,10 @@ exports.getUserOrders = async (req, res) => {
 exports.getOrderById = async (req, res) => {
   try {
     const order = await Order.findByPk(req.params.id, {
-      include: Product,
+      include: [{ model: Product }],
     });
 
-    if (!order || order.userId !== req.user.id) {
+    if (!order) {
       return res.status(404).json({ error: 'Order not found' });
     }
 

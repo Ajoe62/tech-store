@@ -3,7 +3,7 @@ const { DataTypes } = require('sequelize');
 module.exports = (sequelize) => {
   return sequelize.define('Order', {
     totalAmount: {
-      type: DataTypes.FLOAT,
+      type: DataTypes.DECIMAL,
       allowNull: false,
     },
   });

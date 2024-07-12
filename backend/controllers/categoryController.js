@@ -24,8 +24,10 @@ exports.getCategoryById = async (req, res) => {
 };
 
 exports.createCategory = async (req, res) => {
+  const { name, description } = req.body;
+
   try {
-    const category = await Category.create(req.body);
+    const category = await Category.create({ name, description });
     res.status(201).json(category);
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
@@ -33,6 +35,8 @@ exports.createCategory = async (req, res) => {
 };
 
 exports.updateCategory = async (req, res) => {
+  const { name, description } = req.body;
+
   try {
     const category = await Category.findByPk(req.params.id);
 
@@ -40,7 +44,11 @@ exports.updateCategory = async (req, res) => {
       return res.status(404).json({ error: 'Category not found' });
     }
 
-    await category.update(req.body);
+    category.name = name;
+    category.description = description;
+
+    await category.save();
+
     res.status(200).json(category);
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
@@ -56,7 +64,8 @@ exports.deleteCategory = async (req, res) => {
     }
 
     await category.destroy();
-    res.status(204).end();
+
+    res.status(204).json();
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
   }
