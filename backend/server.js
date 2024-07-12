@@ -6,6 +6,7 @@ const productRoutes = require('./routes/productRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const { authenticate } = require('./middleware/authMiddleware');
+require('dotenv').config();
 
 app.use(express.json());
 

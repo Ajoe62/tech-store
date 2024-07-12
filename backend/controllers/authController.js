@@ -1,12 +1,17 @@
 const { User } = require('../models');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const { generateToken } = require('../utils/validator');
 
 exports.register = async (req, res) => {
   const { name, email, password, address, role } = req.body;
 
   try {
+    const existingUser = await User.findOne({ where: { email } });
+
+    if (existingUser) {
+      return res.status(400).json({ error: 'Email already exists' });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.create({
       name,
@@ -20,6 +25,7 @@ exports.register = async (req, res) => {
 
     res.status(201).json({ token });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: 'Server error' });
   }
 };

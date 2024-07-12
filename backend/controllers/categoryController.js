@@ -1,4 +1,5 @@
 const { Category } = require('../models');
+const category = require('../models/category');
 
 exports.getAllCategories = async (req, res) => {
   try {
@@ -26,6 +27,11 @@ exports.getCategoryById = async (req, res) => {
 exports.createCategory = async (req, res) => {
   const { name, description } = req.body;
 
+  if (!name || !description)
+    return res.status(400).json({ error: 'Name and description are required' });
+  if (await category.findOne({ where: { name } }))
+    return res.status(400).json({ error: 'Category already exists' });
+
   try {
     const category = await Category.create({ name, description });
     res.status(201).json(category);
@@ -36,7 +42,10 @@ exports.createCategory = async (req, res) => {
 
 exports.updateCategory = async (req, res) => {
   const { name, description } = req.body;
-
+  if (!name || !description)
+    return res.status(400).json({ error: 'Name and description are required' });
+  if (await category.findOne({ where: { name } }))
+    return res.status(400).json({ error: 'Category already exists' });
   try {
     const category = await Category.findByPk(req.params.id);
 

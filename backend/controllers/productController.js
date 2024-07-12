@@ -28,8 +28,26 @@ exports.getProductById = async (req, res) => {
 exports.createProduct = async (req, res) => {
   const { name, description, price, stockQuantity, categoryId, imageUrl } =
     req.body;
-
   try {
+    const category = await Category.findByPk(categoryId);
+
+    if (
+      !name ||
+      !description ||
+      !price ||
+      !stockQuantity ||
+      !categoryId ||
+      !imageUrl
+    )
+      return res.status(400).json({ error: 'All fields are required' });
+
+    if (await Product.findOne({ where: { name } }))
+      return res.status(400).json({ error: 'Product already exists' });
+
+    if (!category) {
+      return res.status(404).json({ error: 'Category not found' });
+    }
+
     const product = await Product.create({
       name,
       description,
@@ -51,6 +69,19 @@ exports.updateProduct = async (req, res) => {
 
   try {
     const product = await Product.findByPk(req.params.id);
+
+    if (
+      !name ||
+      !description ||
+      !price ||
+      !stockQuantity ||
+      !categoryId ||
+      !imageUrl
+    )
+      return res.status(400).json({ error: 'All fields are required' });
+
+    if (await Product.findOne({ where: { name } }))
+      return res.status(400).json({ error: 'Product already exists' });
 
     if (!product) {
       return res.status(404).json({ error: 'Product not found' });
