@@ -12,17 +12,11 @@ const Order = OrderModel(sequelize);
 User.hasMany(Order, { foreignKey: 'userId' });
 Order.belongsTo(User, { foreignKey: 'userId' });
 
-Product.belongsTo(Category, { foreignKey: 'categoryId' });
-Category.hasMany(Product, { foreignKey: 'categoryId' });
+Product.hasMany(Order, { foreignKey: 'productId' });
+Order.belongsTo(Product, { foreignKey: 'productId' });
 
-Order.belongsToMany(Product, {
-  through: 'OrderProducts',
-  foreignKey: 'orderId',
-});
-Product.belongsToMany(Order, {
-  through: 'OrderProducts',
-  foreignKey: 'productId',
-});
+Category.hasMany(Product, { foreignKey: 'categoryId' });
+Product.belongsTo(Category, { foreignKey: 'categoryId' });
 
 sequelize.sync();
 

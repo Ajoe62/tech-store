@@ -1,10 +1,28 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-  return sequelize.define('Order', {
+  const Order = sequelize.define('Order', {
     totalAmount: {
-      type: DataTypes.DECIMAL,
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: false,
+    },
+    status: {
+      type: DataTypes.ENUM('pending', 'completed', 'cancelled'),
+      defaultValue: 'pending',
+    },
+    quantity: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    productId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    userId: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
   });
+
+  return Order;
 };
