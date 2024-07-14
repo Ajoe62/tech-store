@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import api from '../utils/api';
+import axios from 'axios';
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -11,12 +11,15 @@ const Register = () => {
     e.preventDefault();
 
     try {
-      const response = await api.post('/auth/register', {
-        email,
-        password,
-        name,
-        address,
-      });
+      const response = await axios.post(
+        'http://localhost:3000/api/auth/register',
+        {
+          email,
+          password,
+          name,
+          address,
+        }
+      );
       localStorage.setItem('token', response.data.token);
       window.location.href = '/';
     } catch (error) {
@@ -24,7 +27,7 @@ const Register = () => {
     }
   };
 
-  if (localStorage.getItem('token')) {
+  if (localStorage.getItem('user')) {
     window.location.href = '/';
     alert('You are already logged in');
   }

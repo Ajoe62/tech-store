@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import ProductCard from '../components/ProductCard';
-import api from '../utils/api';
+import axios from 'axios';
 
 const Home = () => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const response = await api.get('/products');
+      const response = await axios.get('http://localhost:3000/products');
       setProducts(response.data);
     };
 

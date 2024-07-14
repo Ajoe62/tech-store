@@ -22,7 +22,9 @@ exports.register = async (req, res) => {
     });
 
     const token = generateToken(user);
-
+    if (role === 'admin') {
+      return res.status(201).json({ token, role });
+    }
     res.status(201).json({ token });
   } catch (error) {
     console.error(error);
@@ -47,7 +49,9 @@ exports.login = async (req, res) => {
     }
 
     const token = generateToken(user);
-
+    if (user.role === 'admin') {
+      return res.status(200).json({ token, role: user.role });
+    }
     res.status(200).json({ token });
   } catch (error) {
     res.status(500).json({ error: 'Server error' });

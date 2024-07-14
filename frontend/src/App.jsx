@@ -6,6 +6,9 @@ import ProductDetails from './pages/ProductDetails';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import AdminDashboard from './pages/AdminDashboard';
+import AddProduct from './pages/AddProduct';
+import EditProduct from './pages/EditProduct';
+import ViewOrders from './pages/ViewOrders';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import { AuthProvider } from './context/AuthContext';
@@ -24,7 +27,13 @@ const App = () => {
                 <Route path='/product/:id' element={<ProductDetails />} />
                 <Route path='/cart' element={<Cart />} />
                 <Route path='/checkout' element={<Checkout />} />
-                <Route path='/admin' element={<AdminDashboard />} />
+                <Route path='/admin/*' element={<AdminDashboard />} />
+                <Route path='/admin/add-product' element={<AddProduct />} />
+                <Route
+                  path='/admin/edit-product/:id'
+                  element={<EditProduct />}
+                />
+                <Route path='/admin/view-orders' element={<ViewOrders />} />
                 <Route path='/login' element={<Login />} />
                 <Route path='/register' element={<Register />} />
               </Routes>

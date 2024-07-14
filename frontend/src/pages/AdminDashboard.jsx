@@ -1,37 +1,40 @@
-import { useEffect, useState } from 'react';
-import api from '../utils/api';
+import { Link, Route, Routes } from 'react-router-dom';
+import AddProduct from './AddProduct';
+import EditProduct from './EditProduct';
+import ViewOrders from './ViewOrders';
 
 const AdminDashboard = () => {
-  const [products, setProducts] = useState([]);
+  if (!localStorage.getItem('user')) {
+    window.location.href = '/login';
+    alert('You need to login first');
+  }
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      const response = await api.get('/admin/products');
-      setProducts(response.data);
-    };
-
-    fetchProducts();
-  }, []);
+  if (localStorage.getItem('role') !== 'admin') {
+    window.location.href = '/';
+    alert('You are not authorized');
+  }
 
   return (
-    <div className='container mx-auto mt-8'>
-      <h1 className='text-2xl font-bold'>Admin Dashboard</h1>
-      <div className='mt-4 grid grid-cols-4 gap-4'>
-        {products.map((product) => (
-          <div key={product.id} className='border rounded p-4'>
-            <img
-              src={product.image}
-              alt={product.name}
-              className='w-full h-48 object-cover'
-            />
-            <h2 className='mt-2 font-bold'>{product.name}</h2>
-            <p className='mt-1 text-gray-600'>${product.price}</p>
-            <button className='mt-2 bg-red-500 text-white p-2 rounded'>
-              Delete
-            </button>
-          </div>
-        ))}
-      </div>
+    <div className='container mx-auto px-4 py-8'>
+      <h1 className='text-2xl font-bold mb-4'>Admin Dashboard</h1>
+      <nav className='mb-4'>
+        <ul className='flex space-x-4'>
+          <li>
+            <Link to='/admin/add-product'>Add Product</Link>
+          </li>
+          <li>
+            <Link to='/admin/edit-product'>Edit Product</Link>
+          </li>
+          <li>
+            <Link to='/admin/view-orders'>View Orders</Link>
+          </li>
+        </ul>
+      </nav>
+      <Routes>
+        <Route path='/add-product' element={<AddProduct />} />
+        <Route path='/edit-product' element={<EditProduct />} />
+        <Route path='/view-orders' element={<ViewOrders />} />
+      </Routes>
     </div>
   );
 };
