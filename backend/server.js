@@ -7,9 +7,10 @@ const categoryRoutes = require('./routes/categoryRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const { authenticate } = require('./middleware/authMiddleware');
 require('dotenv').config();
+const cors = require('cors');
 
+app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
 app.use(express.json());
-
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);

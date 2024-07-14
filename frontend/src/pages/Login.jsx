@@ -10,11 +10,18 @@ const Login = () => {
 
     try {
       const response = await api.post('/auth/login', { email, password });
-      console.log(response.data); // Handle login success
+
+      localStorage.setItem('token', response.data.token, { expires: 1 });
+      window.location.href = '/';
     } catch (error) {
       console.error(error); // Handle login error
     }
   };
+
+  if (localStorage.getItem('token')) {
+    window.location.href = '/';
+    alert('You are already logged in');
+  }
 
   return (
     <div className='container mx-auto mt-8'>
