@@ -5,6 +5,9 @@ const AddProductForm = () => {
   const [price, setPrice] = useState('');
   const [categoryId, setCategoryId] = useState('');
   const [categories, setCategories] = useState([]);
+  const [imageUrl, setImageUrl] = useState('');
+  const [stockQuantity, setStockQuantity] = useState('');
+  const [description, setDescription] = useState('');
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -17,8 +20,34 @@ const AddProductForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log({
+      name,
+      description,
+      price,
+      stockQuantity,
+      categoryId,
+      imageUrl,
+    });
     try {
-      await axios.post('/api/products', { name, price, categoryId });
+      await axios.post(
+        'http://localhost:3000/api/products',
+        {
+          name,
+          description,
+          price,
+          stockQuantity,
+          categoryId,
+          imageUrl,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem('user')).token
+            }`,
+            role: JSON.parse(localStorage.getItem('user')).role,
+          },
+        }
+      );
       alert('Product added successfully');
       setName('');
       setPrice('');
@@ -30,7 +59,20 @@ const AddProductForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form
+      onSubmit={handleSubmit}
+      className='w-1/2 mx-auto mt-10 p-4 border border-gray'
+    >
+      <div className='mb-4'>
+        <label className='block text-sm font-bold mb-2'>Image</label>
+        <input
+          type='file'
+          className='w-full px-3 py-2 border rounded'
+          value={imageUrl}
+          onChange={(e) => setImageUrl(e.target.value)}
+          required
+        />
+      </div>
       <div className='mb-4'>
         <label className='block text-sm font-bold mb-2'>Product Name</label>
         <input
@@ -42,12 +84,31 @@ const AddProductForm = () => {
         />
       </div>
       <div className='mb-4'>
+        <label className='block text-sm font-bold mb-2'>Description</label>
+        <textarea
+          className='w-full px-3 py-2 border rounded'
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          required
+        ></textarea>
+      </div>
+      <div className='mb-4'>
         <label className='block text-sm font-bold mb-2'>Price</label>
         <input
           type='number'
           className='w-full px-3 py-2 border rounded'
           value={price}
           onChange={(e) => setPrice(e.target.value)}
+          required
+        />
+      </div>
+      <div className='mb-4'>
+        <label className='block text-sm font-bold mb-2'>Stock Quantity</label>
+        <input
+          type='number'
+          className='w-full px-3 py-2 border rounded'
+          value={stockQuantity}
+          onChange={(e) => setStockQuantity(e.target.value)}
           required
         />
       </div>
