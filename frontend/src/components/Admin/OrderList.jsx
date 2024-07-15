@@ -6,7 +6,17 @@ const OrderList = () => {
 
   useEffect(() => {
     const fetchOrders = async () => {
-      const response = await axios.get('http://localhost:3000/api/orders');
+      const response = await axios.get(
+        'http://localhost:3000/api/orders/admin/all',
+        {
+          headers: {
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem('user')).token
+            }`,
+            role: JSON.parse(localStorage.getItem('user')).role,
+          },
+        }
+      );
       setOrders(response.data);
     };
 

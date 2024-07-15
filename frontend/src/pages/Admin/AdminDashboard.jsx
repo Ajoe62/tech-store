@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-
+import ProductList from '../../components/Admin/ProductList';
 const AdminDashboard = () => {
   if (!localStorage.getItem('user')) {
     location.href = '/login';
@@ -22,6 +22,9 @@ const AdminDashboard = () => {
         </Link>
         <Link to='/admin/view-products'>View Products</Link>
       </nav>
+      <div className='my-4'>
+        <ProductList />
+      </div>
     </div>
   );
 };
