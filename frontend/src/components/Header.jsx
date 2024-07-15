@@ -13,12 +13,22 @@ const Header = () => {
           <Link to='/cart' className='mr-4'>
             Cart
           </Link>
+          {localStorage.getItem('user') &&
+            JSON.parse(localStorage.getItem('user')).role === 'admin' && (
+              <Link to='/admin' className='mr-4'>
+                Admin
+              </Link>
+            )}
           {localStorage.getItem('user') ? (
             <>
               <Link to='/profile' className='mr-4'>
                 Profile
               </Link>
               <button onClick={logout}>Logout</button>
+
+              <Link to='/orders' className='ml-4'>
+                Orders
+              </Link>
             </>
           ) : (
             <>

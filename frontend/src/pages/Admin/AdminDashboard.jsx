@@ -20,7 +20,6 @@ const AdminDashboard = () => {
         <Link to='/admin/view-orders' className='mr-4'>
           View Orders
         </Link>
-        <Link to='/admin/view-products'>View Products</Link>
       </nav>
       <div className='my-4'>
         <ProductList />
