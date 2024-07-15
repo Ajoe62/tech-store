@@ -10,7 +10,7 @@ export const CartProvider = ({ children }) => {
     setCart(cartFromLocalStorage);
   }, []);
 
-  const addToCart = (product, quantity) => {
+  const addToCart = (product) => {
     const existingCartItem = cart.find(
       (item) => item.product.id === product.id
     );
@@ -30,7 +30,7 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  const removeFromCart = (productId, quantity) => {
+  const removeFromCart = (productId) => {
     const existingCartItem = cart.find((item) => item.product.id === productId);
     if (existingCartItem.quantity === 1) {
       const newCart = cart.filter((item) => item.product.id !== productId);
