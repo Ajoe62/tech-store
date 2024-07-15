@@ -1,15 +1,13 @@
 import { Link } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
 import { useContext } from 'react';
-
-function Header() {
+import { AuthContext } from '../context/AuthContext';
+const Header = () => {
   const { logout } = useContext(AuthContext);
-
   return (
-    <header className='bg-gray-800 text-white p-4'>
+    <header className='bg-gray-800 p-4 text-white'>
       <div className='container mx-auto flex justify-between'>
         <Link to='/' className='text-xl font-bold'>
-          Tech Store
+          E-Commerce
         </Link>
         <nav>
           <Link to='/cart' className='mr-4'>
@@ -17,14 +15,14 @@ function Header() {
           </Link>
           {localStorage.getItem('user') ? (
             <>
-              <Link className='mr-5' to='/profile'>
+              <Link to='/profile' className='mr-4'>
                 Profile
               </Link>
-              <button onClick={() => logout()}>Logout</button>
+              <button onClick={logout}>Logout</button>
             </>
           ) : (
             <>
-              <Link className='mr-5' to='/register'>
+              <Link to='/register' className='mr-4'>
                 Register
               </Link>
               <Link to='/login'>Login</Link>
@@ -34,6 +32,6 @@ function Header() {
       </div>
     </header>
   );
-}
+};
 
 export default Header;

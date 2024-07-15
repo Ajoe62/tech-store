@@ -5,20 +5,21 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-
+  const userString = localStorage.getItem('user');
   useEffect(() => {
-    // Check for user authentication on load
-    const checkAuth = async () => {
-      try {
-        const response = await axios.get(
-          'http://localhost:3000/api/auth/profile'
-        );
-        setUser(response.data);
-      } catch (error) {
-        console.error(error);
-      }
+    const fetchUser = async () => {
+      const response = await axios.get(
+        'http://localhost:3000/api/auth/profile',
+        {
+          headers: {
+            Authorization: `Bearer ${JSON.parse(userString).token}`,
+          },
+        }
+      );
+      setUser(response.data);
     };
-    checkAuth();
+
+    fetchUser();
   }, []);
 
   const login = async (email, password) => {
@@ -26,14 +27,11 @@ export const AuthProvider = ({ children }) => {
       email,
       password,
     });
-    setUser(response.data);
-    if (response.data.role) {
-      localStorage.setItem('role', response.data.role);
-    }
     localStorage.setItem('user', JSON.stringify(response.data));
+    setUser(response.data);
   };
 
-  const logout = () => {
+  const logout = async () => {
     localStorage.removeItem('user');
     setUser(null);
   };

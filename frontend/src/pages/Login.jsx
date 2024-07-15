@@ -1,31 +1,28 @@
-import { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { useContext } from 'react';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { login } = useContext(AuthContext);
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await login(email, password);
-      navigate('/');
+      alert('Login successful');
+      location.href = '/';
     } catch (error) {
       console.error(error);
       alert('Failed to login');
     }
   };
-
   if (localStorage.getItem('user')) {
-    window.location.href = '/';
-    alert('You are already logged in');
+    location.href = '/';
   }
-
   return (
-    <div className='container mx-auto px-4 py-8'>
+    <div className='container mx-auto'>
       <h1 className='text-2xl font-bold mb-4'>Login</h1>
       <form onSubmit={handleSubmit}>
         <div className='mb-4'>

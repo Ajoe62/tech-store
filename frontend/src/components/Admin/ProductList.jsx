@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import ProductCard from '../components/ProductCard';
 
-const Home = () => {
+const ProductList = () => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -15,15 +14,15 @@ const Home = () => {
   }, []);
 
   return (
-    <div className='container mx-auto'>
-      <h1 className='text-2xl font-bold mb-4'>Products</h1>
-      <div className='grid grid-cols-4 gap-4'>
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </div>
+    <div>
+      {products.map((product) => (
+        <div key={product.id} className='border p-4 rounded mb-4'>
+          <h2 className='text-xl font-bold'>{product.name}</h2>
+          <p>${product.price}</p>
+        </div>
+      ))}
     </div>
   );
 };
 
-export default Home;
+export default ProductList;
