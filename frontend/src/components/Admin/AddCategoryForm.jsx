@@ -8,7 +8,21 @@ const AddCategoryForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:3000/api/categories', { name });
+      await axios.post(
+        'http://localhost:3000/api/categories',
+        {
+          name,
+          description,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem('user')).token
+            }`,
+            role: JSON.parse(localStorage.getItem('user')).role,
+          },
+        }
+      );
       alert('Category added successfully');
       setName('');
     } catch (error) {
@@ -28,6 +42,15 @@ const AddCategoryForm = () => {
           onChange={(e) => setName(e.target.value)}
           required
         />
+      </div>
+      <div className='mb-4'>
+        <label className='block text-sm font-bold mb-2'>Description</label>
+        <textarea
+          className='w-full px-3 py-2 border rounded'
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          required
+        ></textarea>
       </div>
       <button
         type='submit'

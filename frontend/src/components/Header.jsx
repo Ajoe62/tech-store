@@ -7,7 +7,7 @@ const Header = () => {
     <header className='bg-gray-800 p-4 text-white'>
       <div className='container mx-auto flex justify-between'>
         <Link to='/' className='text-xl font-bold'>
-          E-Commerce
+          Tech-Store
         </Link>
         <nav>
           <Link to='/cart' className='mr-4'>
