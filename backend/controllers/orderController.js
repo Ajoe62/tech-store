@@ -57,3 +57,20 @@ exports.getAllOrders = async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 };
+
+exports.updateOrderStatus = async (req, res) => {
+  try {
+    const order = await Order.findByPk(req.params.id);
+
+    if (!order) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+
+    order.status = req.body.status;
+    await order.save();
+
+    res.status(200).json(order);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+};

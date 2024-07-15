@@ -4,16 +4,23 @@ import OrderItem from '../components/OrderItem';
 
 const UserOrders = () => {
   const [orders, setOrders] = useState([]);
-
+  const fetchOrders = async () => {
+    try {
+      const res = await axios.get('http://localhost:3000/api/orders', {
+        headers: {
+          Authorization: `Bearer ${
+            JSON.parse(localStorage.getItem('user')).token
+          }`,
+        },
+      });
+      setOrders(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   useEffect(() => {
-    const fetchOrders = async () => {
-      const response = await axios.get('http://localhost:3000/api/orders');
-      setOrders(response.data);
-    };
-
     fetchOrders();
   }, []);
-
   return (
     <div className='container mx-auto'>
       <h1 className='text-2xl font-bold mb-4'>Your Orders</h1>
