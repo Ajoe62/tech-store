@@ -3,7 +3,7 @@ import { CartContext } from '../context/CartContext';
 import { useContext } from 'react';
 
 const Checkout = () => {
-  const { cart } = useContext(CartContext);
+  const { cart, clearCart } = useContext(CartContext);
 
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
@@ -26,6 +26,10 @@ const Checkout = () => {
           },
         }
       );
+
+      alert('Order placed successfully');
+      clearCart();
+      location.href = '/orders';
     } catch (error) {
       console.error(error);
     }
