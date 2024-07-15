@@ -1,9 +1,20 @@
+import { CartContext } from '../context/CartContext';
+import { useContext } from 'react';
+
 const CartItem = ({ item }) => {
+  const { removeFromCart } = useContext(CartContext);
+
+  const handleRemoveFromCart = () => {
+    removeFromCart(item.product.id);
+  };
+
   return (
-    <div className='border p-4 rounded'>
-      <h2 className='text-xl font-bold'>{item.product.name}</h2>
+    <div>
+      <img src={item.product.image} alt={item.product.name} />
+      <h3>{item.product.name}</h3>
+      <p>{item.product.price}</p>
       <p>Quantity: {item.quantity}</p>
-      <p>${item.product.price}</p>
+      <button onClick={handleRemoveFromCart}>Remove from Cart</button>
     </div>
   );
 };

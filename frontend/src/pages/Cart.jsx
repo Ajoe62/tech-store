@@ -6,11 +6,13 @@ const Cart = () => {
   const { cart } = useContext(CartContext);
 
   return (
-    <div className='container mx-auto'>
-      <h1 className='text-2xl font-bold mb-4'>Cart</h1>
-      {cart.map((item) => (
-        <CartItem key={item.product.id} item={item} />
-      ))}
+    <div>
+      <h1 className='text-2xl font-bold'>Cart</h1>
+      {cart.length === 0 ? (
+        <p>Your cart is empty</p>
+      ) : (
+        cart.map((item) => <CartItem key={item.product.id} item={item} />)
+      )}
     </div>
   );
 };

@@ -5,18 +5,21 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const userString = localStorage.getItem('user');
+  const userString = localStorage.getItem('user') || null;
+
   useEffect(() => {
     const fetchUser = async () => {
-      const response = await axios.get(
-        'http://localhost:3000/api/auth/profile',
-        {
-          headers: {
-            Authorization: `Bearer ${JSON.parse(userString).token}`,
-          },
-        }
-      );
-      setUser(response.data);
+      if (userString) {
+        const response = await axios.get(
+          'http://localhost:3000/api/auth/profile',
+          {
+            headers: {
+              Authorization: `Bearer ${JSON.parse(userString).token}`,
+            },
+          }
+        );
+        setUser(response.data);
+      }
     };
 
     fetchUser();
