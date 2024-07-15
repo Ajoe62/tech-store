@@ -1,23 +1,13 @@
 const { Order, Product, User } = require('../models');
 
 exports.createOrder = async (req, res) => {
-  const { totalAmount, quantity, productId } = req.body;
   const userId = req.user.id;
 
-  if (!totalAmount || !quantity || !productId)
-    return res.status(400).json({ error: 'All fields are required' });
-
   try {
-    const product = await Product.findByPk(productId);
-
-    if (!product) {
-      return res.status(404).json({ error: 'Product not found' });
-    }
-
     const order = await Order.create({
-      totalAmount,
-      quantity,
-      productId,
+      totalAmount: req.body.totalAmount,
+      quantity: req.body.quantity,
+      productId: req.body.productId,
       userId,
     });
 
