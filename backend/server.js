@@ -9,7 +9,12 @@ const { authenticate } = require('./middleware/authMiddleware');
 require('dotenv').config();
 const cors = require('cors');
 
-app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
+//app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
+// Move CORS middleware to the top
+app.use(cors({
+  origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
+  credentials: true
+}));
 app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
