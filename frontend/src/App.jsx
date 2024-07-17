@@ -15,6 +15,21 @@ import AddProduct from './pages/Admin/AddProduct';
 import AddCategory from './pages/Admin/AddCategory';
 import ViewOrders from './pages/Admin/ViewOrders';
 
+
+const categories = [
+  { id: 1, name: "CCTV", image: cctv },
+  { id: 2, name: "Headphones", image: headphone },
+  { id: 3, name: "Smartphones", image: phone },
+  { id: 4, name: "Keyboards", image: lighting_keyboard },
+  { id: 5, name: "Mobile Tech", image: mobile_tech },
+  { id: 6, name: "PCs", image: pc },
+  { id: 7, name: "Phones", image: phones },
+  { id: 8, name: "Networking", image: router },
+  { id: 9, name: "Smart Watches", image: smart_watch },
+  { id: 10, name: "Tablets", image: tablet },
+  { id: 11, name: "Watches", image: watch }
+];
+
 const App = () => {
   return (
     <AuthProvider>

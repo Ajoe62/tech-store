@@ -1,13 +1,14 @@
 import { Link } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import logo from '../assets/logo.png'
 const Header = () => {
   const { logout } = useContext(AuthContext);
   return (
     <header className='bg-gray-800 p-4 text-white'>
       <div className='container mx-auto flex justify-between'>
         <Link to='/' className='text-xl font-bold'>
-          Tech-Store
+          <img src={logo} alt="" />
         </Link>
         <nav>
           <Link to='/cart' className='mr-4'>
