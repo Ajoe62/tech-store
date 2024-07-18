@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import Header from './components/Header';
-import Footer from './components/Footer';
 import Home from './pages/Home';
 import ProductDetails from './pages/ProductDetails';
 import Cart from './pages/Cart';
@@ -14,33 +13,6 @@ import AdminDashboard from './pages/Admin/AdminDashboard';
 import AddProduct from './pages/Admin/AddProduct';
 import AddCategory from './pages/Admin/AddCategory';
 import ViewOrders from './pages/Admin/ViewOrders';
-
-import cctv from '@/assets/cctv.jpg';
-import headphone from '@/assets/headphone.jpg';
-import iphone from '@/assets/iphone.avif';
-import lighting_keyboard from '@/assets/lighting_keyboard.jpg';
-import mobile_tech from '@/assets/mobile_tech.avif';
-import pc from '@/assets/pc.jpg';
-import phones from '@/assets/phones.jpg';
-import router from '@/assets/router.avif';
-import smart_watch from '@/assets/smart_watch.jpg';
-import tablet from '@/assets/tablet.jpg';
-import watch from '@/assets/watch.jpg';
-
-
-const categories = [
-  { id: 1, name: "CCTV", image: cctv },
-  { id: 2, name: "Headphones", image: headphone },
-  { id: 3, name: "Smartphones", image: iphone },
-  { id: 4, name: "Keyboards", image: lighting_keyboard },
-  { id: 5, name: "Mobile Tech", image: mobile_tech },
-  { id: 6, name: "PCs", image: pc },
-  { id: 7, name: "Phones", image: phones },
-  { id: 8, name: "Networking", image: router },
-  { id: 9, name: "Smart Watches", image: smart_watch },
-  { id: 10, name: "Tablets", image: tablet },
-  { id: 11, name: "Watches", image: watch }
-];
 
 const App = () => {
   return (
@@ -64,7 +36,6 @@ const App = () => {
                 <Route path='/admin/view-orders' element={<ViewOrders />} />
               </Routes>
             </main>
-            <Footer categories={categories}/>
           </div>
         </Router>
       </CartProvider>
