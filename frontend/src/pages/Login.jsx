@@ -12,14 +12,14 @@ const Login = () => {
     try {
       await login(email, password);
       alert('Login successful');
-      location.href = '/';
+      window.location.href = '/';
     } catch (error) {
       console.error(error);
       alert('Failed to login');
     }
   };
   if (localStorage.getItem('user')) {
-    location.href = '/';
+    window.location.href = '/';
   }
   return (
     <div className='container mx-auto'>

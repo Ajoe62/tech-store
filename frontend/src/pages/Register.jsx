@@ -21,7 +21,7 @@ const Register = () => {
           localStorage.setItem('user', JSON.stringify(response.data));
         })
         .then(() => {
-          location.href = '/login';
+          window.location.href = '/login';
         });
       alert('Registration successful');
     } catch (error) {
