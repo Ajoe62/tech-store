@@ -4,8 +4,8 @@ const AdminDashboard = () => {
   if (!localStorage.getItem('user')) {
     location.href = '/login';
   }
-  if (JSON.parse(localStorage.getItem('user')).role !== 'admin') {
-    location.href = '/';
+  if (localStorage.getItem('role') !== 'admin') {
+    window.location.href = '/';
   }
   return (
     <div className='container mx-auto'>

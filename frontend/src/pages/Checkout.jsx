@@ -20,9 +20,7 @@ const Checkout = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem('user')).token
-            }`,
+            Authorization: `Bearer ${localStorage.getItem('user')}`,
           },
         }
       );

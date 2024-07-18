@@ -14,11 +14,11 @@ export const AuthProvider = ({ children }) => {
           'http://localhost:3000/api/auth/profile',
           {
             headers: {
-              Authorization: `Bearer ${JSON.parse(userString).token}`,
+              Authorization: `Bearer ${userString}`,
             },
           }
         );
-        setUser(response.data);
+        setUser(response.data.token);
       }
     };
 
@@ -30,8 +30,9 @@ export const AuthProvider = ({ children }) => {
       email,
       password,
     });
-    localStorage.setItem('user', JSON.stringify(response.data));
-    setUser(response.data);
+    localStorage.setItem('user', response.data.token);
+    localStorage.setItem('role', response.data.role);
+    setUser(response.data.token);
   };
 
   const logout = async () => {

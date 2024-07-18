@@ -16,10 +16,8 @@ const AddCategoryForm = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem('user')).token
-            }`,
-            role: JSON.parse(localStorage.getItem('user')).role,
+            Authorization: `Bearer ${localStorage.getItem('user')}`,
+            role: localStorage.getItem('role'),
           },
         }
       );

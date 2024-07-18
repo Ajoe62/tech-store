@@ -10,25 +10,20 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios
-        .post('http://localhost:3000/api/auth/register', {
-          email,
-          password,
-          name,
-          address,
-        })
-        .then((response) => {
-          localStorage.setItem('user', JSON.stringify(response.data));
-        })
-        .then(() => {
-          window.location.href = '/login';
-        });
+      await axios.post('http://localhost:3000/api/auth/register', {
+        name,
+        email,
+        address,
+        password,
+      });
+      window.location.href = '/login';
       alert('Registration successful');
     } catch (error) {
       console.error(error);
       alert('Failed to register');
     }
   };
+
   if (localStorage.getItem('user')) {
     location.href = '/';
   }
