@@ -3,9 +3,9 @@ import axios from 'axios';
 import Slider from "react-slick";
 import productData from '../utils/productData';
 import ProductCard from '../components/ProductCard';
-import Image1 from "@/assets/cctv.jpg";
+import Image1 from "@/assets/sale.png";
 import Image2 from "@/assets/tab.jpg";
-import Image3 from "@/assets/sale.png";
+import Image3 from "@/assets/cctv.jpg";
 
 const ImageList = [
   {
