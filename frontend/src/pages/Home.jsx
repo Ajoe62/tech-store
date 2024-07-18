@@ -3,22 +3,22 @@ import axios from 'axios';
 import Slider from "react-slick";
 import productData from '../utils/productData';
 import ProductCard from '../components/ProductCard';
-import HeroImage from "./assets/cctv.jpg";
-import Image2 from "./assets/tab.jpg";
-import Image3 from "./assets/hero/sale.png";
+import Image1 from "@/assets/cctv.jpg";
+import Image2 from "@/assets/tab.jpg";
+import Image3 from "@/assets/sale.png";
 
 const ImageList = [
   {
     id: 1,
-    img: HeroImage,
-    title: "Upto 50% off on all Men's Wear",
+    img: Image1,
+    title: "Upto 50% off on purchase above $100",
     description:
       "lorem His Life will forever be Changed dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   },
   {
     id: 2,
     img: Image2,
-    title: "30% off on all Women's Wear",
+    title: "30% off on all Gadgets",
     description:
       "Who's there lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   },
@@ -68,6 +68,7 @@ const Home = () => {
 
   return (
     <div className='container mx-auto'>
+      <img src={Image1} alt="" />
       {/* Hero Section */}
       <div className="relative overflow-hidden min-h-[550px] sm:min-h-[650px] bg-gray-100 flex justify-center items-center dark:bg-gray-950 dark:text-white duration-200 mb-8">
         <div className="h-[700px] w-[700px] bg-primary/40 absolute -top-1/2 right-0 rounded-3xl rotate-45 -z[8]"></div>
