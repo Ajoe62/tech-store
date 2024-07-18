@@ -15,7 +15,9 @@ const Header = () => {
     <header className='bg-gray-800 p-4 text-white'>
       <div className='container mx-auto flex justify-between item-center'>
         <Link to='/' className='text-xl font-bold'>
-          <img src={logo} alt="Logo" className='h-6' />
+        <div className="bg-white rounded-full p-1 flex items-center justify-center h-8 w-8">
+          <img src={logo} alt="Logo" className='h-7 w-7' />
+          </div>
         </Link>
         <nav className='flex items-center'>
           <Link to='/cart' className='mr-4 relative'>
