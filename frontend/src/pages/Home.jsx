@@ -3,7 +3,7 @@ import axios from 'axios';
 import Slider from 'react-slick';
 import productData from '../utils/productData';
 import ProductCard from '../components/ProductCard';
-import Image1 from '@/assets/girl.png';
+import Image1 from '@/assets/man.png';
 import Image2 from '@/assets/cctv.jpg';
 import Image3 from '@/assets/sale.png';
 import Footer from '../components/Footer';
@@ -22,6 +22,8 @@ import watch from '@/assets/watch.jpg';
 import tab from '@/assets/tab.jpg';
 import pad from '@/assets/pad.avif';
 import pc_splash from '@/assets/pc_splash.jpg';
+import monitor from '@/assets/monitor.jpg';
+import tablets from '@/assets/tablets.webp';
 
 
 
@@ -40,6 +42,8 @@ const categoriesImages = [
   { id: 11, name: 'Tab', image: tab },
   { id: 11, name: 'Pad', image: pad },
   { id: 11, name: 'Pc_splash', image: pc_splash },
+  { id: 11, name: 'Monitor', image: monitor },
+  { id: 11, name: 'Tablets', image: tablets },
 ];
 
 const ImageList = [
