@@ -3,8 +3,8 @@ import axios from 'axios';
 import Slider from 'react-slick';
 import productData from '../utils/productData';
 import ProductCard from '../components/ProductCard';
-import Image1 from '@/assets/cctv.jpg';
-import Image2 from '@/assets/tab.jpg';
+import Image1 from '@/assets/girl.png';
+import Image2 from '@/assets/cctv.jpg';
 import Image3 from '@/assets/sale.png';
 import Footer from '../components/Footer';
 
@@ -19,6 +19,11 @@ import router from '@/assets/router.avif';
 import smart_watch from '@/assets/smart_watch.jpg';
 import tablet from '@/assets/tablet.jpg';
 import watch from '@/assets/watch.jpg';
+import tab from '@/assets/tab.jpg';
+import pad from '@/assets/pad.avif';
+import pc_splash from '@/assets/pc_splash.jpg';
+
+
 
 const categoriesImages = [
   { id: 1, name: 'CCTV', image: cctv },
@@ -32,6 +37,9 @@ const categoriesImages = [
   { id: 9, name: 'Smart Watches', image: smart_watch },
   { id: 10, name: 'Tablets', image: tablet },
   { id: 11, name: 'Watches', image: watch },
+  { id: 11, name: 'Tab', image: tab },
+  { id: 11, name: 'Pad', image: pad },
+  { id: 11, name: 'Pc_splash', image: pc_splash },
 ];
 
 const ImageList = [
@@ -95,44 +103,38 @@ const Home = () => {
 
   return (
     <div className='container mx-auto'>
-      <img src={Image1} alt='' />
+      {/*<img src={Image1} alt='' />*/}
       {/* Hero Section */}
       <div className='relative overflow-hidden min-h-[550px] sm:min-h-[650px] bg-gray-100 flex justify-center items-center dark:bg-gray-950 dark:text-white duration-200 mb-8'>
-        <div className='h-[700px] w-[700px] bg-primary/40 absolute -top-1/2 right-0 rounded-3xl rotate-45 -z[8]'></div>
-        <div className='container pb-8 sm:pb-0'>
-          <Slider {...settings}>
-            {ImageList.map((data) => (
-              <div key={data.id}>
-                <div className='grid grid-cols-1 sm:grid-cols-2'>
-                  <div className='flex flex-col justify-center gap-4 pt-12 sm:pt-0 text-center sm:text-left order-2 sm:order-1 relative z-10'>
-                    <h1 className='text-5xl sm:text-6xl lg:text-7xl font-bold'>
-                      {data.title}
-                    </h1>
-                    <p className='text-sm'>{data.description}</p>
-                    <div>
-                      <button
-                        onClick={handleOrderPopup}
-                        className='bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-2 px-4 rounded-full'
-                      >
-                        Order Now
-                      </button>
-                    </div>
-                  </div>
-                  <div className='order-1 sm:order-2'>
-                    <div className='relative z-10'>
-                      <img
-                        src={data.img}
-                        alt=''
-                        className='w-[300px] h-[300px] sm:h-[450px] sm:w-[450px] sm:scale-105 lg:scale-120 object-contain mx-auto'
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </Slider>
-        </div>
+  <div className='container pb-8 sm:pb-0'>
+    <div className='flex flex-col sm:flex-row'>
+      
+      <div className='w-full sm:w-[40%] p-2'>
+        <img
+          src={Image3} 
+          alt='Sale'
+          className='w-full h-full object-cover rounded-lg'
+        />
       </div>
+      {/* Camera image (70% width) */}
+      <div className='w-full sm:w-[60%] p-2'>
+        <img
+          src={Image1}
+          alt='Camera'
+          className='w-full h-full object-cover rounded-lg'
+        />
+      </div>
+    </div>
+    <div className='mt-8 text-center'>
+      <button
+        onClick={handleOrderPopup}
+        className='bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-2 px-4 rounded-full'
+      >
+        Order Now
+      </button>
+    </div>
+  </div>
+</div>
 
       {/* Categories Section */}
       <h2 className='text-2xl font-bold mb-4'>Categories</h2>
