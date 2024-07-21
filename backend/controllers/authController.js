@@ -64,7 +64,7 @@ exports.getProfile = async (req, res) => {
     const userId = req.user.id;
     const cacheKey = `user:${userId}:profile`;
 
-    console.log(`Attemping to get profile for user${userId}`)
+    console.log(`Attemping to get profile for user${userId}`);
 
     // getting user profile from cache
     const cachedProfile = await redisClient.get(cacheKey);
@@ -73,7 +73,6 @@ exports.getProfile = async (req, res) => {
     }
 
     console.log(`Cache miss for user ${userId}, fetching from database`);
-
 
     // If not in cache, fetch from database
     const user = await User.findByPk(userId, {

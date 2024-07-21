@@ -4,12 +4,15 @@ const { promisify } = require('util');
 class RedisClient {
   constructor() {
     this.client = redis.createClient({
-      host: process.env.REDIS_HOST || 'localhost',
+      host: process.env.REDIS_HOST || '127.0.0.1',
       port: process.env.REDIS_PORT || 6379,
     });
 
-    
-  console.log(`Attempting to connect to Redis at ${process.env.REDIS_HOST || 'localhost'}:${process.env.REDIS_PORT || 6379}`);
+    console.log(
+      `Attempting to connect to Redis at ${
+        process.env.REDIS_HOST || 'localhost'
+      }:${process.env.REDIS_PORT || 6379}`
+    );
 
     this.client.on('error', (error) => {
       console.error('Redis connection error:', error);
@@ -74,14 +77,16 @@ class RedisClient {
 
   async set(key, value, duration) {
     try {
-    console.log(`Setting key: ${key} with value: ${value} for duration: ${duration}`);
-    await this.setAsync(key, value, 'EX', duration);
-    console.log(`Successfully set key: ${key}`);
-  } catch (error) {
-    console.error(`Error setting key ${key}:`, error);
-    throw error;
+      console.log(
+        `Setting key: ${key} with value: ${value} for duration: ${duration}`
+      );
+      await this.setAsync(key, value, 'EX', duration);
+      console.log(`Successfully set key: ${key}`);
+    } catch (error) {
+      console.error(`Error setting key ${key}:`, error);
+      throw error;
+    }
   }
-}
   async keys(pattern) {
     return new Promise((resolve, reject) => {
       this.client.keys(pattern, (err, keys) => {

@@ -26,8 +26,11 @@ app.use(express.json());
 // Adding Redis health check
 app.get('/api/health', (req, res) => {
   res.json({
-    database: sequelize.authenticate().then(() => true).catch(() => false),
-    redis: redisClient.isAlive()
+    database: sequelize
+      .authenticate()
+      .then(() => true)
+      .catch(() => false),
+    redis: redisClient.isAlive(),
   });
 });
 
@@ -49,21 +52,21 @@ sequelize
     console.error('Unable to connect to the database:', err);
   });
 
-  async function startServer() {
-    try {
-      await redisClient.connect();
-      console.log('Redis connection established');
-  
-      const pingResponse = await redisClient.ping();
-      console.log('Redis ping response:', pingResponse);
-  
-      app.listen(port, () => {
-        console.log(`Server is running on port ${port}`);
-      });
-    } catch (error) {
-      console.error('Failed to connect to Redis:', error);
-      process.exit(1);
-    }
+async function startServer() {
+  try {
+    await redisClient.connect();
+    console.log('Redis connection established');
+
+    const pingResponse = await redisClient.ping();
+    console.log('Redis ping response:', pingResponse);
+
+    app.listen(port, () => {
+      console.log(`Server is running on port ${port}`);
+    });
+  } catch (error) {
+    console.error('Failed to connect to Redis:', error);
+    process.exit(1);
   }
-  
-  startServer();
+}
+
+startServer();
