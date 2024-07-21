@@ -25,8 +25,6 @@ import pc_splash from '@/assets/pc_splash.jpg';
 import monitor from '@/assets/monitor.jpg';
 import tablets from '@/assets/tablets.webp';
 
-
-
 const categoriesImages = [
   { id: 1, name: 'CCTV', image: cctv },
   { id: 2, name: 'Headphones', image: headphone },
@@ -110,35 +108,34 @@ const Home = () => {
       {/*<img src={Image1} alt='' />*/}
       {/* Hero Section */}
       <div className='relative overflow-hidden min-h-[550px] sm:min-h-[650px] bg-gray-100 flex justify-center items-center dark:bg-gray-950 dark:text-white duration-200 mb-8'>
-  <div className='container pb-8 sm:pb-0'>
-    <div className='flex flex-col sm:flex-row'>
-      
-      <div className='w-full sm:w-[40%] p-2'>
-        <img
-          src={Image3} 
-          alt='Sale'
-          className='w-full h-full object-cover rounded-lg'
-        />
+        <div className='container pb-8 sm:pb-0'>
+          <div className='flex flex-col sm:flex-row'>
+            <div className='w-full sm:w-[40%] p-2'>
+              <img
+                src={Image3}
+                alt='Sale'
+                className='w-full h-full object-cover rounded-lg'
+              />
+            </div>
+            {/* Camera image (70% width) */}
+            <div className='w-full sm:w-[60%] p-2'>
+              <img
+                src={Image1}
+                alt='Camera'
+                className='w-full h-full object-cover rounded-lg'
+              />
+            </div>
+          </div>
+          <div className='mt-8 text-center'>
+            <button
+              onClick={handleOrderPopup}
+              className='bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-2 px-4 rounded-full'
+            >
+              Order Now
+            </button>
+          </div>
+        </div>
       </div>
-      {/* Camera image (70% width) */}
-      <div className='w-full sm:w-[60%] p-2'>
-        <img
-          src={Image1}
-          alt='Camera'
-          className='w-full h-full object-cover rounded-lg'
-        />
-      </div>
-    </div>
-    <div className='mt-8 text-center'>
-      <button
-        onClick={handleOrderPopup}
-        className='bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-2 px-4 rounded-full'
-      >
-        Order Now
-      </button>
-    </div>
-  </div>
-</div>
 
       {/* Categories Section */}
       <h2 className='text-2xl font-bold mb-4'>Categories</h2>
