@@ -1,9 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import productData from '../utils/productData';
-
-const localProducts = productData.products;
 
 const ProductDetails = () => {
   const { id } = useParams();
