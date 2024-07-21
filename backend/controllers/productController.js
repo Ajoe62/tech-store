@@ -1,29 +1,41 @@
 const { Product, Category } = require('../models');
 const upload = require('../config/multerConfig').single('imageUrl');
+const { getAsync, setAsync, delAsync } = require('../utils/redis');
 
 exports.getAllProducts = async (req, res) => {
-  try {
-    const products = await Product.findAll({ include: [{ model: Category }] });
-    res.status(200).json(products);
-  } catch (error) {
-    res.status(500).json({ error: 'Server error' });
+  const key = req.originalUrl;
+  const cachedData = await getAsync(key);
+
+  if (cachedData) {
+    return res.status(200).json(JSON.parse(cachedData));
   }
+
+  const products = await Product.findAll({
+    include: [{ model: Category }],
+  });
+
+  await setAsync(key, JSON.stringify(products), 'EX', 300);
+  res.status(200).json(products);
 };
 
 exports.getProductById = async (req, res) => {
-  try {
-    const product = await Product.findByPk(req.params.id, {
-      include: [{ model: Category }],
-    });
+  const key = req.originalUrl;
+  const cachedData = await getAsync(key);
 
-    if (!product) {
-      return res.status(404).json({ error: 'Product not found' });
-    }
-
-    res.status(200).json(product);
-  } catch (error) {
-    res.status(500).json({ error: 'Server error' });
+  if (cachedData) {
+    return res.status(200).json(JSON.parse(cachedData));
   }
+
+  const product = await Product.findByPk(req.params.id, {
+    include: [{ model: Category }],
+  });
+
+  if (!product) {
+    return res.status(404).json({ error: 'Product not found' });
+  }
+
+  await setAsync(key, JSON.stringify(product), 'EX', 300);
+  res.status(200).json(product);
 };
 
 exports.createProduct = async (req, res) => {
@@ -35,15 +47,6 @@ exports.createProduct = async (req, res) => {
 
     const { name, description, price, stockQuantity, categoryId } = req.body;
     const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
-
-    console.log('Received data:', {
-      name,
-      description,
-      price,
-      stockQuantity,
-      categoryId,
-      imageUrl,
-    });
 
     if (
       !name ||
@@ -88,42 +91,50 @@ exports.createProduct = async (req, res) => {
 };
 
 exports.updateProduct = async (req, res) => {
-  const { name, description, price, stockQuantity, categoryId, imageUrl } =
-    req.body;
-
-  try {
-    const product = await Product.findByPk(req.params.id);
-
-    if (
-      !name ||
-      !description ||
-      !price ||
-      !stockQuantity ||
-      !categoryId ||
-      !imageUrl
-    )
-      return res.status(400).json({ error: 'All fields are required' });
-
-    if (await Product.findOne({ where: { name } }))
-      return res.status(400).json({ error: 'Product already exists' });
-
-    if (!product) {
-      return res.status(404).json({ error: 'Product not found' });
+  upload(req, res, async (err) => {
+    if (err) {
+      console.error('Multer error:', err);
+      return res.status(400).json({ error: 'Multer error: ' + err.message });
     }
 
-    product.name = name;
-    product.description = description;
-    product.price = price;
-    product.stockQuantity = stockQuantity;
-    product.categoryId = categoryId;
-    product.imageUrl = imageUrl;
+    const { name, description, price, stockQuantity, categoryId } = req.body;
+    const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
 
-    await product.save();
+    if (!name || !description || !price || !stockQuantity || !categoryId) {
+      return res.status(400).json({ error: 'All fields are required' });
+    }
 
-    res.status(200).json(product);
-  } catch (error) {
-    res.status500().json({ error: 'Server error' });
-  }
+    try {
+      const product = await Product.findByPk(req.params.id);
+
+      if (!product) {
+        console.error('Product not found:', req.params.id);
+        return res.status(404).json({ error: 'Product not found' });
+      }
+
+      const category = await Category.findByPk(categoryId);
+
+      if (!category) {
+        console.error('Category not found:', categoryId);
+        return res.status(404).json({ error: 'Category not found' });
+      }
+
+      await product.update({
+        name,
+        description,
+        price,
+        stockQuantity,
+        imageUrl,
+        categoryId,
+      });
+
+      await delAsync(req.originalUrl);
+      res.status(200).json(product);
+    } catch (error) {
+      console.error('Server error:', error);
+      res.status(500).json({ error: 'Server error: ' + error.message });
+    }
+  });
 };
 
 exports.deleteProduct = async (req, res) => {
@@ -131,13 +142,15 @@ exports.deleteProduct = async (req, res) => {
     const product = await Product.findByPk(req.params.id);
 
     if (!product) {
+      console.error('Product not found:', req.params.id);
       return res.status(404).json({ error: 'Product not found' });
     }
 
     await product.destroy();
-
-    res.status(204).json();
+    await delAsync(req.originalUrl);
+    res.status(200).json({ message: 'Product deleted' });
   } catch (error) {
-    res.status(500).json({ error: 'Server error' });
+    console.error('Server error:', error);
+    res.status(500).json({ error: 'Server error: ' + error.message });
   }
 };
