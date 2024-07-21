@@ -26,7 +26,7 @@ router.get('/test-cache', authenticate, async (req, res) => {
   try {
     const userId = req.user.id;
     const cacheKey = `user:${userId}:profile`;
-    
+
     const cachedValue = await redisClient.get(cacheKey);
     if (cachedValue) {
       res.json({ message: 'Data from cache', data: JSON.parse(cachedValue) });
@@ -40,18 +40,18 @@ router.get('/test-cache', authenticate, async (req, res) => {
 });
 
 router.get('/test-redis-set', async (req, res) => {
-    console.log('Test Redis Set route called')
-    try {
-      await redisClient.set('test-key', 'test-value', 'EX', 60); // Set for 60 seconds
-      console.log('Test key set in Redis');
-      const keys = await redisClient.keys('*');
-      console.log('All keys in Redis:', keys);
-      res.json({ message: 'Test key set in Redis', keys });
-    } catch (error) {
-      console.error('Error setting test key in Redis:', error);
-      res.status(500).json({ error: 'Failed to set test key in Redis' });
-    }
-  });
+  console.log('Test Redis Set route called');
+  try {
+    await redisClient.set('test-key', 'test-value', 'EX', 60); // Set for 60 seconds
+    console.log('Test key set in Redis');
+    const keys = await redisClient.keys('*');
+    console.log('All keys in Redis:', keys);
+    res.json({ message: 'Test key set in Redis', keys });
+  } catch (error) {
+    console.error('Error setting test key in Redis:', error);
+    res.status(500).json({ error: 'Failed to set test key in Redis' });
+  }
+});
 
 router.post('/clear-cache', authenticate, async (req, res) => {
   try {
@@ -65,4 +65,4 @@ router.post('/clear-cache', authenticate, async (req, res) => {
   }
 });
 
-module.exports = router
+module.exports = router;

@@ -16,7 +16,7 @@ const ProductCard = ({ product }) => {
     <div className='border rounded-lg shadow-md p-4 flex flex-col'>
       <Link to={`/product/${product.id}`} className='flex-grow'>
         <img
-          src={`http://localhost:3000/uploads/${product.image}`}
+          src={`http://localhost:3000/${product.image}`}
           alt={product.name}
           className='w-full h-48 object-cover mb-4'
         />
