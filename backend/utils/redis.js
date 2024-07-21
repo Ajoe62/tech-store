@@ -10,7 +10,7 @@ class RedisClient {
 
     console.log(
       `Attempting to connect to Redis at ${
-        process.env.REDIS_HOST || 'localhost'
+        process.env.REDIS_HOST || '127.0.0.1'
       }:${process.env.REDIS_PORT || 6379}`
     );
 
