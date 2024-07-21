@@ -1,21 +1,21 @@
 const redis = require('redis');
-const { promisify } = require('util');
 
-const client = redis.createClient({
-  host: process.env.REDIS_HOST,
-  port: process.env.REDIS_PORT,
-});
+let client;
 
-client.on('error', (error) => {
-  console.error(error);
-});
+const initRedisClient = async () => {
+  if (!client) {
+    client = redis.createClient({
+      url: 'redis://localhost:6379',
+    });
 
-client.on('connect', () => {
-  console.log('Redis connected');
-});
+    client.on('error', (err) => console.error('Redis Client Error', err));
 
-const getAsync = promisify(client.get).bind(client);
-const setAsync = promisify(client.set).bind(client);
-const delAsync = promisify(client.del).bind(client);
+    await client.connect();
+  }
+};
 
-module.exports = { client, getAsync, setAsync, delAsync };
+const getAsync = (key) => client.get(key);
+const setAsync = (key, value, ...args) => client.set(key, value, ...args);
+const delAsync = (key) => client.del(key);
+
+module.exports = { initRedisClient, getAsync, setAsync, delAsync };

@@ -6,14 +6,16 @@ const productRoutes = require('./routes/productRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const { authenticate } = require('./middleware/authMiddleware');
+const { initRedisClient } = require('./utils/redis');
 
 const path = require('path');
 require('dotenv').config();
 const cors = require('cors');
 const port = process.env.PORT || 3000;
 
-//app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
-// Move CORS middleware to the top
+// Initialize Redis client
+initRedisClient();
+
 app.use(
   cors({
     origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
@@ -21,12 +23,10 @@ app.use(
   })
 );
 app.use(express.json());
-
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/orders', authenticate, orderRoutes);
-
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 sequelize

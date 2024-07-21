@@ -1,7 +1,8 @@
-const { getAsync, setAsync } = require('../utils/redis');
+const { getAsync, setAsync, initRedisClient } = require('../utils/redis');
 
 const cache = (duration) => {
   return async (req, res, next) => {
+    await initRedisClient(); // Ensure Redis client is connected
     const key = req.originalUrl;
     const cachedData = await getAsync(key);
 
