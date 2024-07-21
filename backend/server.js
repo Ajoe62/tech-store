@@ -6,15 +6,11 @@ const productRoutes = require('./routes/productRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const { authenticate } = require('./middleware/authMiddleware');
-const { initRedisClient } = require('./utils/redis');
 
 const path = require('path');
 require('dotenv').config();
 const cors = require('cors');
 const port = process.env.PORT || 3000;
-
-// Initialize Redis client
-initRedisClient();
 
 app.use(
   cors({

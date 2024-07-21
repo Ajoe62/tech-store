@@ -1,5 +1,4 @@
 const { Order, Product, User } = require('../models');
-const { getAsync, setAsync, delAsync } = require('../utils/redis');
 
 exports.createOrder = async (req, res) => {
   const userId = req.user.id;
@@ -20,7 +19,6 @@ exports.createOrder = async (req, res) => {
       });
     }
 
-    await delAsync('GET /api/orders');
     res.status(201).json(order);
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
@@ -29,12 +27,6 @@ exports.createOrder = async (req, res) => {
 
 exports.getUserOrders = async (req, res) => {
   const userId = req.user.id;
-  const key = `GET /api/orders/user/${userId}`;
-  const cachedData = await getAsync(key);
-
-  if (cachedData) {
-    return res.status(200).json(JSON.parse(cachedData));
-  }
 
   try {
     const orders = await Order.findAll({
@@ -42,7 +34,6 @@ exports.getUserOrders = async (req, res) => {
       include: Product,
     });
 
-    await setAsync(key, JSON.stringify(orders), 'EX', 300);
     res.status(200).json(orders);
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
@@ -51,12 +42,6 @@ exports.getUserOrders = async (req, res) => {
 
 exports.getOrderById = async (req, res) => {
   const orderId = req.params.id;
-  const key = `GET /api/orders/${orderId}`;
-  const cachedData = await getAsync(key);
-
-  if (cachedData) {
-    return res.status(200).json(JSON.parse(cachedData));
-  }
 
   try {
     const order = await Order.findByPk(orderId, {
@@ -67,7 +52,6 @@ exports.getOrderById = async (req, res) => {
       return res.status(404).json({ error: 'Order not found' });
     }
 
-    await setAsync(key, JSON.stringify(order), 'EX', 300);
     res.status(200).json(order);
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
@@ -75,19 +59,11 @@ exports.getOrderById = async (req, res) => {
 };
 
 exports.getAllOrders = async (req, res) => {
-  const key = 'GET /api/orders';
-  const cachedData = await getAsync(key);
-
-  if (cachedData) {
-    return res.status(200).json(JSON.parse(cachedData));
-  }
-
   try {
     const orders = await Order.findAll({
       include: [Product, User],
     });
 
-    await setAsync(key, JSON.stringify(orders), 'EX', 300);
     res.status(200).json(orders);
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
@@ -107,7 +83,6 @@ exports.updateOrderStatus = async (req, res) => {
 
     order.status = status;
     await order.save();
-    await delAsync('GET /api/orders');
     res.status(200).json({ message: 'Order status updated' });
   } catch (error) {
     res.status(500).json({ error: 'Server error' });

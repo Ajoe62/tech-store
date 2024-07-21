@@ -1,7 +1,6 @@
 const { User } = require('../models');
 const bcrypt = require('bcrypt');
 const { generateToken } = require('../utils/validator');
-const { getAsync, setAsync, delAsync } = require('../utils/redis');
 
 exports.register = async (req, res) => {
   const { name, email, password, address, role } = req.body;
@@ -63,12 +62,6 @@ exports.login = async (req, res) => {
 exports.getProfile = async (req, res) => {
   try {
     const userId = req.user.id;
-    const key = `/profile/${userId}`;
-    const cachedData = await getAsync(key);
-
-    if (cachedData) {
-      return res.status(200).json(JSON.parse(cachedData));
-    }
 
     const user = await User.findByPk(userId, {
       attributes: { exclude: ['password'] },
@@ -78,7 +71,6 @@ exports.getProfile = async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    await setAsync(key, JSON.stringify(user), 'EX', 300);
     res.status(200).json(user);
   } catch (error) {
     console.error('Error in getProfile:', error);
@@ -101,8 +93,6 @@ exports.updateProfile = async (req, res) => {
     user.email = email || user.email;
     user.address = address || user.address;
 
-    await user.save();
-    await delAsync(`/profile/${userId}`);
     res.status(200).json({ message: 'Profile updated' });
   } catch (error) {
     console.error('Error in updateProfile:', error);

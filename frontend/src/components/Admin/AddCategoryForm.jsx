@@ -25,7 +25,7 @@ const AddCategoryForm = () => {
       setName('');
     } catch (error) {
       console.error(error);
-      alert('Failed to add category');
+      alert('Failed to add category', error.message);
     }
   };
 

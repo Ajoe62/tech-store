@@ -1,31 +1,19 @@
 const { Product, Category } = require('../models');
 const upload = require('../config/multerConfig').single('imageUrl');
-const { getAsync, setAsync, delAsync } = require('../utils/redis');
 
 exports.getAllProducts = async (req, res) => {
-  const key = req.originalUrl;
-  const cachedData = await getAsync(key);
-
-  if (cachedData) {
-    return res.status(200).json(JSON.parse(cachedData));
+  try {
+    const products = await Product.findAll({
+      include: [{ model: Category }],
+    });
+    res.status(200).json(products);
+  } catch (error) {
+    console.error('Server error:', error);
+    res.status(500).json({ error: 'Server error: ' + error.message });
   }
-
-  const products = await Product.findAll({
-    include: [{ model: Category }],
-  });
-
-  await setAsync(key, JSON.stringify(products), 'EX', 300);
-  res.status(200).json(products);
 };
 
 exports.getProductById = async (req, res) => {
-  const key = req.originalUrl;
-  const cachedData = await getAsync(key);
-
-  if (cachedData) {
-    return res.status(200).json(JSON.parse(cachedData));
-  }
-
   const product = await Product.findByPk(req.params.id, {
     include: [{ model: Category }],
   });
@@ -34,7 +22,6 @@ exports.getProductById = async (req, res) => {
     return res.status(404).json({ error: 'Product not found' });
   }
 
-  await setAsync(key, JSON.stringify(product), 'EX', 300);
   res.status(200).json(product);
 };
 
@@ -128,7 +115,6 @@ exports.updateProduct = async (req, res) => {
         categoryId,
       });
 
-      await delAsync(req.originalUrl);
       res.status(200).json(product);
     } catch (error) {
       console.error('Server error:', error);
@@ -145,9 +131,7 @@ exports.deleteProduct = async (req, res) => {
       console.error('Product not found:', req.params.id);
       return res.status(404).json({ error: 'Product not found' });
     }
-
-    await product.destroy();
-    await delAsync(req.originalUrl);
+    product.destroy();
     res.status(200).json({ message: 'Product deleted' });
   } catch (error) {
     console.error('Server error:', error);
