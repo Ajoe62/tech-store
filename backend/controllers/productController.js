@@ -4,6 +4,7 @@ const upload = require('../config/multerConfig').single('imageUrl');
 exports.getAllProducts = async (req, res) => {
   try {
     const products = await Product.findAll({ include: [{ model: Category }] });
+    console.log(products);
     res.status(200).json(products);
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
@@ -29,11 +30,21 @@ exports.getProductById = async (req, res) => {
 exports.createProduct = async (req, res) => {
   upload(req, res, async (err) => {
     if (err) {
-      return res.status(400).json({ error: err });
+      console.error('Multer error:', err);
+      return res.status(400).json({ error: 'Multer error: ' + err.message });
     }
 
     const { name, description, price, stockQuantity, categoryId } = req.body;
     const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
+
+    console.log('Received data:', {
+      name,
+      description,
+      price,
+      stockQuantity,
+      categoryId,
+      imageUrl,
+    });
 
     if (
       !name ||
@@ -50,10 +61,13 @@ exports.createProduct = async (req, res) => {
       const category = await Category.findByPk(categoryId);
 
       if (!category) {
+        console.error('Category not found:', categoryId);
         return res.status(404).json({ error: 'Category not found' });
       }
 
-      if (await Product.findOne({ where: { name } })) {
+      const existingProduct = await Product.findOne({ where: { name } });
+      if (existingProduct) {
+        console.error('Product already exists:', name);
         return res.status(400).json({ error: 'Product already exists' });
       }
 
@@ -62,13 +76,14 @@ exports.createProduct = async (req, res) => {
         description,
         price,
         stockQuantity,
-        categoryId,
         imageUrl,
+        categoryId,
       });
 
       res.status(201).json(product);
     } catch (error) {
-      res.status(500).json({ error: 'Server error' });
+      console.error('Server error:', error);
+      res.status(500).json({ error: 'Server error: ' + error.message });
     }
   });
 };

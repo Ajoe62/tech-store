@@ -38,14 +38,13 @@ const AddProductForm = () => {
           'Content-Type': 'multipart/form-data',
         },
       });
-
       alert('Product added successfully');
       setName('');
       setPrice('');
       setCategoryId('');
-      setImageFile(null);
       setStockQuantity('');
       setDescription('');
+      setImageFile(null);
     } catch (error) {
       console.error(error);
       alert('Failed to add product');
