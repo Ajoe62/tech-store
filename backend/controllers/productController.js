@@ -1,4 +1,5 @@
 const { Product, Category } = require('../models');
+const upload = require('../config/multerConfig').single('imageUrl');
 
 exports.getAllProducts = async (req, res) => {
   try {
@@ -26,10 +27,13 @@ exports.getProductById = async (req, res) => {
 };
 
 exports.createProduct = async (req, res) => {
-  const { name, description, price, stockQuantity, categoryId, imageUrl } =
-    req.body;
-  try {
-    const category = await Category.findByPk(categoryId);
+  upload(req, res, async (err) => {
+    if (err) {
+      return res.status(400).json({ error: err });
+    }
+
+    const { name, description, price, stockQuantity, categoryId } = req.body;
+    const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
 
     if (
       !name ||
@@ -38,29 +42,35 @@ exports.createProduct = async (req, res) => {
       !stockQuantity ||
       !categoryId ||
       !imageUrl
-    )
+    ) {
       return res.status(400).json({ error: 'All fields are required' });
-
-    if (await Product.findOne({ where: { name } }))
-      return res.status(400).json({ error: 'Product already exists' });
-
-    if (!category) {
-      return res.status(404).json({ error: 'Category not found' });
     }
 
-    const product = await Product.create({
-      name,
-      description,
-      price,
-      stockQuantity,
-      categoryId,
-      imageUrl,
-    });
+    try {
+      const category = await Category.findByPk(categoryId);
 
-    res.status(201).json(product);
-  } catch (error) {
-    res.status(500).json({ error: 'Server error' });
-  }
+      if (!category) {
+        return res.status(404).json({ error: 'Category not found' });
+      }
+
+      if (await Product.findOne({ where: { name } })) {
+        return res.status(400).json({ error: 'Product already exists' });
+      }
+
+      const product = await Product.create({
+        name,
+        description,
+        price,
+        stockQuantity,
+        categoryId,
+        imageUrl,
+      });
+
+      res.status(201).json(product);
+    } catch (error) {
+      res.status(500).json({ error: 'Server error' });
+    }
+  });
 };
 
 exports.updateProduct = async (req, res) => {

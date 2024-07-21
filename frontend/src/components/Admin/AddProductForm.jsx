@@ -1,11 +1,12 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+
 const AddProductForm = () => {
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
   const [categoryId, setCategoryId] = useState('');
   const [categories, setCategories] = useState([]);
-  const [imageUrl, setImageUrl] = useState('');
+  const [imageFile, setImageFile] = useState(null);
   const [stockQuantity, setStockQuantity] = useState('');
   const [description, setDescription] = useState('');
 
@@ -20,36 +21,31 @@ const AddProductForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({
-      name,
-      description,
-      price,
-      stockQuantity,
-      categoryId,
-      imageUrl,
-    });
+
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('description', description);
+    formData.append('price', price);
+    formData.append('stockQuantity', stockQuantity);
+    formData.append('categoryId', categoryId);
+    formData.append('imageUrl', imageFile);
+
     try {
-      await axios.post(
-        'http://localhost:3000/api/products',
-        {
-          name,
-          description,
-          price,
-          stockQuantity,
-          categoryId,
-          imageUrl,
+      await axios.post('http://localhost:3000/api/products', formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('user')}`,
+          role: localStorage.getItem('role'),
+          'Content-Type': 'multipart/form-data',
         },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('user')}`,
-            role: localStorage.getItem('role'),
-          },
-        }
-      );
+      });
+
       alert('Product added successfully');
       setName('');
       setPrice('');
       setCategoryId('');
+      setImageFile(null);
+      setStockQuantity('');
+      setDescription('');
     } catch (error) {
       console.error(error);
       alert('Failed to add product');
@@ -66,8 +62,7 @@ const AddProductForm = () => {
         <input
           type='file'
           className='w-full px-3 py-2 border rounded'
-          value={imageUrl}
-          onChange={(e) => setImageUrl(e.target.value)}
+          onChange={(e) => setImageFile(e.target.files[0])}
           required
         />
       </div>
