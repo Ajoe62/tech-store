@@ -2,14 +2,22 @@ const { Order, Product, User } = require('../models');
 
 exports.createOrder = async (req, res) => {
   const userId = req.user.id;
+  const { products } = req.body;
 
   try {
-    const order = await Order.create({
-      totalAmount: req.body.totalAmount,
-      quantity: req.body.quantity,
-      productId: req.body.productId,
-      userId,
-    });
+    const order = await Order.create({ userId });
+
+    for (const product of products) {
+      const productInstance = await Product.findByPk(product.id);
+
+      if (!productInstance) {
+        return res.status(400).json({ error: 'Product not found' });
+      }
+
+      await order.addProduct(productInstance, {
+        through: { quantity: product.quantity },
+      });
+    }
 
     res.status(201).json(order);
   } catch (error) {
@@ -21,7 +29,10 @@ exports.getUserOrders = async (req, res) => {
   const userId = req.user.id;
 
   try {
-    const orders = await Order.findAll({ where: { userId }, include: Product });
+    const orders = await Order.findAll({
+      where: { userId },
+      include: Product,
+    });
 
     res.status(200).json(orders);
   } catch (error) {
@@ -30,12 +41,11 @@ exports.getUserOrders = async (req, res) => {
 };
 
 exports.getOrderById = async (req, res) => {
-  const userId = req.user.id;
+  const orderId = req.params.id;
 
   try {
-    const order = await Order.findOne({
-      where: { id: req.params.id, userId },
-      include: Product,
+    const order = await Order.findByPk(orderId, {
+      include: [Product, User],
     });
 
     if (!order) {
@@ -50,7 +60,9 @@ exports.getOrderById = async (req, res) => {
 
 exports.getAllOrders = async (req, res) => {
   try {
-    const orders = await Order.findAll({ include: [Product, User] });
+    const orders = await Order.findAll({
+      include: [Product, User],
+    });
 
     res.status(200).json(orders);
   } catch (error) {
@@ -59,17 +71,19 @@ exports.getAllOrders = async (req, res) => {
 };
 
 exports.updateOrderStatus = async (req, res) => {
+  const orderId = req.params.id;
+  const { status } = req.body;
+
   try {
-    const order = await Order.findByPk(req.params.id);
+    const order = await Order.findByPk(orderId);
 
     if (!order) {
       return res.status(404).json({ error: 'Order not found' });
     }
 
-    order.status = req.body.status;
+    order.status = status;
     await order.save();
-
-    res.status(200).json(order);
+    res.status(200).json({ message: 'Order status updated' });
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
   }

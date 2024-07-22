@@ -1,39 +1,47 @@
 const { Category } = require('../models');
 const category = require('../models/category');
+const upload = require('../config/multerConfig').single('image');
 
 exports.getAllCategories = async (req, res) => {
-  try {
-    const categories = await Category.findAll();
-    res.status(200).json(categories);
-  } catch (error) {
-    res.status(500).json({ error: 'Server error' });
-  }
+  const categories = await Category.findAll();
+
+  res.status(200).json(categories);
 };
 
 exports.getCategoryById = async (req, res) => {
-  try {
-    const category = await Category.findByPk(req.params.id);
+  const category = await Category.findByPk(req.params.id);
 
-    if (!category) {
-      return res.status(404).json({ error: 'Category not found' });
-    }
-
-    res.status(200).json(category);
-  } catch (error) {
-    res.status(500).json({ error: 'Server error' });
+  if (!category) {
+    return res.status(404).json({ error: 'Category not found' });
   }
+
+  res.status(200).json(category);
 };
 
 exports.createCategory = async (req, res) => {
-  const { name, description } = req.body;
+  upload(req, res, async (err) => {
+    if (err) {
+      console.error('Multer error:', err);
+      return res.status(400).json({ error: 'Multer error: ' + err.message });
+    }
+  });
 
-  if (!name || !description)
-    return res.status(400).json({ error: 'Name and description are required' });
-  if (await Category.findOne({ where: { name } }))
-    return res.status(400).json({ error: 'Category already exists' });
+  const { name, description } = req.body;
+  const image = req.file ? `/uploads/${req.file.filename}` : null;
+
+  if (!name || !description || !image) {
+    return res.status(400).json({ error: 'All fields are required' });
+  }
 
   try {
-    const category = await Category.create({ name, description });
+    const existingCategory = await Category.findOne({ where: { name } });
+
+    if (existingCategory) {
+      return res.status(400).json({ error: 'Category already exists' });
+    }
+
+    const category = await Category.create({ name, description, image });
+
     res.status(201).json(category);
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
@@ -41,11 +49,20 @@ exports.createCategory = async (req, res) => {
 };
 
 exports.updateCategory = async (req, res) => {
+  upload(req, res, async (err) => {
+    if (err) {
+      console.error('Multer error:', err);
+      return res.status(400).json({ error: 'Multer error: ' + err.message });
+    }
+  });
+
   const { name, description } = req.body;
-  if (!name || !description)
-    return res.status(400).json({ error: 'Name and description are required' });
-  if (await Category.findOne({ where: { name } }))
-    return res.status(400).json({ error: 'Category already exists' });
+  const image = req.file ? `/uploads/${req.file.filename}` : null;
+
+  if (!name || !description || !image) {
+    return res.status(400).json({ error: 'All fields are required' });
+  }
+
   try {
     const category = await Category.findByPk(req.params.id);
 
@@ -55,9 +72,9 @@ exports.updateCategory = async (req, res) => {
 
     category.name = name;
     category.description = description;
+    category.image = image;
 
     await category.save();
-
     res.status(200).json(category);
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
@@ -73,8 +90,7 @@ exports.deleteCategory = async (req, res) => {
     }
 
     await category.destroy();
-
-    res.status(204).json();
+    res.status(204).end();
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
   }
