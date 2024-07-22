@@ -23,6 +23,9 @@ const AddCategoryForm = () => {
         },
       });
       alert('Category added successfully');
+      setName('');
+      setDescription('');
+      setImage(null);
     } catch (error) {
       console.error('Error adding category:', error);
       alert('Error adding category');
