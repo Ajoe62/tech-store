@@ -1,6 +1,6 @@
 const Footer = ({ categories }) => {
   return (
-    <footer className='bg-gray-800 text-white mt-auto'>
+    <footer className='bg-gray-800 text-white mt-20'>
       <div className='container mx-auto px-4 py-16'>
         <h2 className='text-3xl font-bold mb-8'>Featured Categories</h2>
         {categories.map((category) => (

@@ -14,6 +14,8 @@ import AddProduct from './pages/Admin/AddProduct';
 import AddCategory from './pages/Admin/AddCategory';
 import ViewOrders from './pages/Admin/ViewOrders';
 import CategoryList from './pages/CategoryList';
+import Profile from './pages/Profile';
+import Notfound from './pages/Notfound';
 const App = () => {
   return (
     <AuthProvider>
@@ -35,6 +37,8 @@ const App = () => {
                 <Route path='/admin/add-category' element={<AddCategory />} />
                 <Route path='/admin/view-orders' element={<ViewOrders />} />
                 <Route path='/category/:id' element={<CategoryList />} />
+                <Route path='*' element={<Notfound />} />
+                <Route path='/profile' element={<Profile />} />
               </Routes>
             </main>
           </div>

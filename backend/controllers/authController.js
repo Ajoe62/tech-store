@@ -18,7 +18,11 @@ exports.register = async (req, res) => {
       email,
       password: hashedPassword,
       address,
+<<<<<<< HEAD
       role: role || 'admin',
+=======
+      role: 'user',
+>>>>>>> e85de35b9a742d1bde9b846e5a082d0f908952fb
     });
 
     const token = generateToken(user);
@@ -60,9 +64,9 @@ exports.login = async (req, res) => {
 };
 
 exports.getProfile = async (req, res) => {
-  try {
-    const userId = req.user.id;
+  const userId = req.user.id;
 
+  try {
     const user = await User.findByPk(userId, {
       attributes: { exclude: ['password'] },
     });
