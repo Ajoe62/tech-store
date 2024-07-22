@@ -28,6 +28,12 @@ const AdminDashboard = () => {
           >
             Add Category
           </Link>
+          <Link
+            to='/admin/view-orders'
+            className='bg-yellow-500 text-white px-6 py-3 rounded-lg shadow-md hover:bg-yellow-600 transition'
+          >
+            Orders
+          </Link>
         </div>
         <div className='bg-white shadow-md rounded-lg p-6'>
           <ProductList />
