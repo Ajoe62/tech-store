@@ -2,22 +2,21 @@ const { Order, Product, User } = require('../models');
 
 exports.createOrder = async (req, res) => {
   const userId = req.user.id;
-  const { products } = req.body;
+  const { totalAmount, products } = req.body; // expecting products to be an array of { productId, quantity }
 
   try {
-    const order = await Order.create({ userId });
+    const order = await Order.create({
+      totalAmount,
+      userId,
+    });
 
-    for (const product of products) {
-      const productInstance = await Product.findByPk(product.id);
+    const orderProducts = products.map(({ productId, quantity }) => ({
+      orderId: order.id,
+      productId,
+      quantity,
+    }));
 
-      if (!productInstance) {
-        return res.status(400).json({ error: 'Product not found' });
-      }
-
-      await order.addProduct(productInstance, {
-        through: { quantity: product.quantity },
-      });
-    }
+    await OrderProduct.bulkCreate(orderProducts);
 
     res.status(201).json(order);
   } catch (error) {
@@ -31,9 +30,9 @@ exports.getUserOrders = async (req, res) => {
   try {
     const orders = await Order.findAll({
       where: { userId },
-      include: Product,
+      include: [Product, User],
     });
-
+    console.log(orders);
     res.status(200).json(orders);
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
@@ -45,7 +44,10 @@ exports.getOrderById = async (req, res) => {
 
   try {
     const order = await Order.findByPk(orderId, {
-      include: [Product, User],
+      include: {
+        model: Product,
+        through: { attributes: ['quantity'] },
+      },
     });
 
     if (!order) {
