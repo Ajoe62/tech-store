@@ -1,13 +1,13 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-
+import { useParams, useNavigate } from 'react-router-dom';
+import ProductCard from '../components/ProductCard';
 const CategoryList = () => {
   const [category, setCategory] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [product, setProduct] = useState(null);
-
+  const navigate = useNavigate();
   const { id } = useParams();
 
   const fetchCategory = async () => {
@@ -28,6 +28,10 @@ const CategoryList = () => {
   useEffect(() => {
     fetchCategory();
   }, [id]);
+
+  const handleProductClick = (productId) => {
+    navigate(`/product/${productId}`);
+  };
 
   if (loading) {
     return <p>Loading...</p>;
@@ -55,16 +59,11 @@ const CategoryList = () => {
       <h3 className='text-2xl font-bold mb-4'>Products</h3>
       <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
         {product.map((product) => (
-          <div key={product.id} className='border p-4 rounded-lg'>
-            <Link to={`/product/${product.id}`}>
-              <img
-                src={`http://localhost:3000${product.imageUrl}`}
-                alt={product.name}
-                className='w-full h-48 object-cover mb-4'
-              />
-              <h4 className='text-xl font-bold'>{product.name}</h4>
-            </Link>
-          </div>
+          <ProductCard
+            key={product.id}
+            product={product}
+            onClick={() => handleProductClick(product.id)}
+          />
         ))}
       </div>
     </section>
