@@ -9,8 +9,6 @@ import CategoryCard from '../components/CategoryCard';
 
 const Home = () => {
   const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
-
   const fetchProducts = async () => {
     try {
       const response = await axios.get('http://localhost:3000/api/products');
@@ -19,17 +17,9 @@ const Home = () => {
       console.error('Error fetching products:', error);
     }
   };
-  const fetchCategories = async () => {
-    try {
-      const response = await axios.get('http://localhost:3000/api/categories');
-      setCategories(response.data);
-    } catch (error) {
-      console.error('Error fetching categories:', error);
-    }
-  };
+
   useEffect(() => {
     fetchProducts();
-    fetchCategories();
   }, []);
 
   // const settings = {
