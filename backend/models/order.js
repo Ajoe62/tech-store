@@ -10,6 +10,14 @@ module.exports = (sequelize) => {
       type: DataTypes.ENUM('pending', 'completed', 'cancelled'),
       defaultValue: 'pending',
     },
+    quantity: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    productId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,

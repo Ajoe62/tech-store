@@ -10,8 +10,10 @@ const OrderList = () => {
         'http://localhost:3000/api/orders/admin/all',
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('user')}`,
-            role: localStorage.getItem('role'),
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem('user')).token
+            }`,
+            role: JSON.parse(localStorage.getItem('user')).role,
           },
         }
       );
