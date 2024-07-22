@@ -1,4 +1,4 @@
-const { Category } = require('../models');
+const { Category, Product } = require('../models');
 
 exports.getAllCategories = async (req, res) => {
   try {
@@ -11,10 +11,13 @@ exports.getAllCategories = async (req, res) => {
 
 exports.getCategoryById = async (req, res) => {
   try {
-    const category = await Category.findByPk(req.params.id);
+    const category = await Category.findByPk(req.params.id, {
+      include: Product,
+    });
     if (!category) {
       return res.status(404).json({ error: 'Category not found' });
     }
+    console.log(category.Products);
     res.status(200).json(category);
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
