@@ -26,6 +26,17 @@ const Footer = ({ categories }) => {
             </>
           ))}
         </div>
+        <div className='flex justify-center mt-8'>
+          <a href='https://github.com/Mohanned-sameh/tech-store' target='_blank' rel='noopener noreferrer' className='mx-4'>
+            GitHub
+          </a>
+          <a href='https://twitter.com/Web_with_Joe' target='_blank' rel='noopener noreferrer' className='mx-4'>
+            Twitter
+          </a>
+          <a href='https://www.linkedin.com/in/akharumejoseph' target='_blank' rel='noopener noreferrer' className='mx-4'>
+            LinkedIn
+          </a>
+        </div>
       </div>
       <div className='container mx-auto text-center py-4'>
         &copy; {new Date().getFullYear()} Tech-Store
