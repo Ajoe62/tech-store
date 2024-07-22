@@ -8,9 +8,7 @@ const UserOrders = () => {
     try {
       const res = await axios.get('http://localhost:3000/api/orders', {
         headers: {
-          Authorization: `Bearer ${
-            JSON.parse(localStorage.getItem('user')).token
-          }`,
+          Authorization: `Bearer ${localStorage.getItem('user')}`,
         },
       });
       setOrders(res.data);
