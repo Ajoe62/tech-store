@@ -72,7 +72,7 @@ const Checkout = () => {
         </div>
         <button
           onClick={handlePlaceOrder}
-          className='bg-green-500 text-white font-semibold py-2 px-4 mt-6'
+          className='bg-green-500 text-white font-semibold py-2 px-4 mt-6 rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50'
         >
           Place Order
         </button>

@@ -60,9 +60,9 @@ exports.login = async (req, res) => {
 };
 
 exports.getProfile = async (req, res) => {
-  try {
-    const userId = req.user.id;
+  const userId = req.user.id;
 
+  try {
     const user = await User.findByPk(userId, {
       attributes: { exclude: ['password'] },
     });

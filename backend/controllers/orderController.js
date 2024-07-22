@@ -2,22 +2,15 @@ const { Order, Product, User } = require('../models');
 
 exports.createOrder = async (req, res) => {
   const userId = req.user.id;
-  const { products } = req.body;
+  const { totalAmount, quantity, productId } = req.body;
 
   try {
-    const order = await Order.create({ userId });
-
-    for (const product of products) {
-      const productInstance = await Product.findByPk(product.id);
-
-      if (!productInstance) {
-        return res.status(400).json({ error: 'Product not found' });
-      }
-
-      await order.addProduct(productInstance, {
-        through: { quantity: product.quantity },
-      });
-    }
+    const order = await Order.create({
+      totalAmount,
+      quantity,
+      productId,
+      userId,
+    });
 
     res.status(201).json(order);
   } catch (error) {
