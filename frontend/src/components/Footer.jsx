@@ -12,7 +12,7 @@ const Footer = ({ categories }) => {
                   className='bg-gray-700 rounded-lg shadow-md overflow-hidden'
                 >
                   <img
-                    src={category.image}
+                    src={`http://localhost:3000${category.image}`}
                     alt={category.name}
                     className='w-full h-48 object-cover'
                   />

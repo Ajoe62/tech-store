@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ProductCard from '../components/ProductCard';
-import categories from '../utils/productData';
 import Image1 from '@/assets/man.png';
 import Image3 from '@/assets/sale.png';
 import Footer from '@/components/Footer';
@@ -13,6 +12,7 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const [categories, setCategories] = useState([]);
 
   const fetchProducts = async () => {
     try {
@@ -26,9 +26,22 @@ const Home = () => {
       setLoading(false);
     }
   };
+  const fetchCategories = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get('http://localhost:3000/api/categories');
+      setCategories(response.data);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+      setError('Failed to fetch categories. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchProducts();
+    fetchCategories();
   }, []);
 
   const handleOrderPopup = () => {
@@ -40,8 +53,9 @@ const Home = () => {
     navigate(`/product/${productId}`);
   };
 
-  if (loading) return <div className="text-center py-10">Loading...</div>;
-  if (error) return <div className="text-center py-10 text-red-500">{error}</div>;
+  if (loading) return <div className='text-center py-10'>Loading...</div>;
+  if (error)
+    return <div className='text-center py-10 text-red-500'>{error}</div>;
 
   return (
     <div className='container mx-auto px-4'>
@@ -80,9 +94,9 @@ const Home = () => {
       <h2 className='text-3xl font-bold mb-6'>Products</h2>
       <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
         {products.map((product) => (
-          <ProductCard 
-            key={product.id} 
-            product={product} 
+          <ProductCard
+            key={product.id}
+            product={product}
             onClick={() => handleProductClick(product.id)}
           />
         ))}

@@ -6,7 +6,7 @@ const productRoutes = require('./routes/productRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const { authenticate } = require('./middleware/authMiddleware');
-
+const bodyparser = require('body-parser');
 const path = require('path');
 require('dotenv').config();
 const cors = require('cors');
@@ -18,7 +18,8 @@ app.use(
     credentials: true,
   })
 );
-app.use(express.json());
+app.use(bodyparser.json());
+app.use(bodyparser.urlencoded({ extended: false }));
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);

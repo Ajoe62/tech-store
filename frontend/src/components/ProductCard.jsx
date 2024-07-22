@@ -19,7 +19,7 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <div 
+    <div
       className='border rounded-lg shadow-md p-4 flex flex-col transition-all duration-300 hover:shadow-lg cursor-pointer'
       onClick={handleCardClick}
     >
@@ -31,7 +31,9 @@ const ProductCard = ({ product }) => {
             className='w-full h-48 object-cover transition-transform duration-300 hover:scale-105'
           />
         </div>
-        <h3 className='text-lg font-semibold mb-2 hover:text-blue-600 transition-colors duration-300'>{product.name}</h3>
+        <h3 className='text-lg font-semibold mb-2 hover:text-blue-600 transition-colors duration-300'>
+          {product.name}
+        </h3>
         <p className='text-gray-600 mb-2'>
           {product.description.substring(0, 100)}...
         </p>
