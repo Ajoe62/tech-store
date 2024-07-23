@@ -37,6 +37,9 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     localStorage.removeItem('user');
+    localStorage.removeItem('role');
+    localStorage.removeItem('cart');
+    window.location.reload();
     setUser(null);
   };
 
