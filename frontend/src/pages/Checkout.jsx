@@ -16,7 +16,7 @@ const Checkout = () => {
             0
           ),
           quantity: cart.reduce((acc, item) => acc + item.quantity, 0),
-          productId: cart.map((item) => item.product.id),
+          productIds: cart.map((item) => item.product.id),
         },
         {
           headers: {
@@ -27,9 +27,10 @@ const Checkout = () => {
 
       alert('Order placed successfully');
       clearCart();
-      location.href = '/orders';
+      window.location.href = '/orders';
     } catch (error) {
       console.error(error);
+      alert('Failed to place order. Please try again later.');
     }
   };
 

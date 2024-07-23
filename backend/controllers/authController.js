@@ -18,7 +18,7 @@ exports.register = async (req, res) => {
       email,
       password: hashedPassword,
       address,
-      role: 'user',
+      role: 'admin',
     });
 
     const token = generateToken(user);
@@ -81,7 +81,7 @@ exports.getProfile = async (req, res) => {
 exports.updateProfile = async (req, res) => {
   const userId = req.user.id;
   const { name, email, address } = req.body;
-
+  console.log(req.body);
   try {
     const user = await User.findByPk(userId);
 
@@ -89,9 +89,10 @@ exports.updateProfile = async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    user.name = name || user.name;
-    user.email = email || user.email;
-    user.address = address || user.address;
+    user.name = name;
+    user.email = email;
+    user.address = address;
+    await user.save();
 
     res.status(200).json({ message: 'Profile updated' });
   } catch (error) {

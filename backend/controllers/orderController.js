@@ -2,15 +2,23 @@ const { Order, Product, User } = require('../models');
 
 exports.createOrder = async (req, res) => {
   const userId = req.user.id;
-  const { totalAmount, quantity, productId } = req.body;
+  const { totalAmount, quantity, productIds } = req.body; // expecting an array of product IDs
 
   try {
     const order = await Order.create({
       totalAmount,
       quantity,
-      productId,
       userId,
     });
+
+    // Associate products with the order
+    const products = await Product.findAll({
+      where: {
+        id: productIds,
+      },
+    });
+
+    await order.addProducts(products);
 
     res.status(201).json(order);
   } catch (error) {

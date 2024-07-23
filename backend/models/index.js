@@ -3,20 +3,25 @@ const UserModel = require('./user');
 const ProductModel = require('./product');
 const CategoryModel = require('./category');
 const OrderModel = require('./order');
+const OrderProductModel = require('./orderProduct');
 
 const User = UserModel(sequelize);
 const Product = ProductModel(sequelize);
 const Category = CategoryModel(sequelize);
 const Order = OrderModel(sequelize);
+const OrderProduct = OrderProductModel(sequelize);
 
 User.hasMany(Order, { foreignKey: 'userId' });
 Order.belongsTo(User, { foreignKey: 'userId' });
 
-Product.hasMany(Order, { foreignKey: 'productId' });
-Order.belongsTo(Product, { foreignKey: 'productId' });
-
 Category.hasMany(Product, { foreignKey: 'categoryId' });
 Product.belongsTo(Category, { foreignKey: 'categoryId' });
+
+Order.belongsToMany(Product, { through: OrderProduct, foreignKey: 'orderId' });
+Product.belongsToMany(Order, {
+  through: OrderProduct,
+  foreignKey: 'productId',
+});
 
 sequelize.sync();
 
@@ -25,4 +30,5 @@ module.exports = {
   Product,
   Category,
   Order,
+  OrderProduct,
 };
