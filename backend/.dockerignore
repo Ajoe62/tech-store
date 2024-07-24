@@ -12,6 +12,7 @@ node_modules
 
 # misc
 .DS_Store
+.env
 .env.local
 .env.development.local
 .env.test.local
@@ -39,8 +40,30 @@ lerna-debug.log*
 .gitignore
 
 # docker
-Dockerfile
+docker-compose*
+compose.y*ml
+Dockerfile*
 .dockerignore
 
 # project specific
 *.local
+
+# build artifacts
+**/.classpath
+**/.project
+**/.settings
+**/.toolstarget
+**/.vs
+**/.next
+**/.cache
+**/*.*proj.user
+**/*.dbmdl
+**/*.jfm
+
+# miscellaneous
+**/charts
+**/obj
+**/secrets.dev.yaml
+**/values.dev.yaml
+LICENSE
+README.md
